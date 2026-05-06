@@ -4,10 +4,88 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Day 2 - Flexbox Hero</title>
+    <style>
+        *{
+            margin:0;
+            padding:0;
+            box-sizing:border-box;
+        }
+        body{
+            font-family :'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f4f2eb;
+            color:#1a1a1a;
+        }
+        .navbar{
+            display:flex;
+            justify-content: space-between;
+            align-items: center;
+            background:#1a1a1a;
+            padding:0 2rem;
+            height: 64px;
+        }
+        .logo{
+            font-size:1.2rem;
+            font-weight:bold;
+            color:#f5f4f0;
+            letter-spacing: 0.05rem;
+            text-decoration: none;
+        }
+        .nav-links{
+            display: flex;
+            gap:2rem;
+            list-style: none;
+        }
+        .nav-links a{
+            color:#aaa;
+            text-decoration: none;
+            font-size:0.9rem;
+            letter-spacing: 0.04rem;
+            transition: color 0.3s ease;
+        }
+        .nav-links a:hover{
+            color:#f5f4f0;
+        }
+        .hero{
+            display:flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items:center;
+            text-align: center;
+            height: calc(100vh - 64px);
+            padding: 2rem;
+        }
+        .hero p{
+            color:#555;
+            font-size:1.2rem;
+            max-width:600px;
+            margin-bottom:2rem;
+        }
+        .hero code{
+            background:#d6d5d5;
+            padding:0.2rem 0.4rem;
+            border-radius:4px;
+            font-family: 'Courier New', Courier, monospace;
+            font-size:0.9rem;
+        }
+        .btn{
+            display:inline-block;
+            border-radius: 80px;
+            padding:0.75rem 1.5rem;
+            background:#1a1a1a;
+            color:#f5f4f0;
+            text-decoration: none;
+            font-size:0.9rem;
+            letter-spacing: 0.04rem;
+            transition: background 0.3s ease;
+        }
+        .btn:hover{
+            background:#333;
+        }
+    </style>
 </head>
 <body>
     <nav class="navbar">
-        <a href="#" class="logo">MyBrand</a>
+        <a href="#" class="logo">MyLOGO</a>
         <ul class="nav-links">
         <li><a href="#">Home</a></li>
         <li><a href="#">About</a></li>
@@ -16,7 +94,9 @@
         </ul>
     </nav>
     <section class="hero">
-        <p>Day-02 Flexbox Hero section with a simple call-to-action button. This layout is perfect for showcasing your work and encouraging visitors to explore more of your projects.
+        <h1>'Day 2 – Flexbox hero</h1>
+        <p> 
+            The three key properties you used: <code>display:flex;</code> , <code>flex-direction: column;</code> , and <code>justify-content: center;</code>.
         </p>
         <a href="#" class="btn">more info</a>
   </section>
