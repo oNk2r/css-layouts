@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Day 5 – CSS Grid Blog Layout</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f5f4f0;
+            color: #1a1a1a;
+        }
+
+        /* ── Navbar (reused from Day 1) ── */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #1a1a1a;
+            padding: 0 2rem;
+            height: 64px;
+        }
+
+        .logo {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #f5f4f0;
+            text-decoration: none;
+            letter-spacing: 0.05em;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: #aaa;
+            text-decoration: none;
+            font-size: 0.9rem;
+            letter-spacing: 0.04em;
+            transition: color 0.2s;
+        }
+
+        .nav-links a:hover { color: #f5f4f0; }
+
+        .page {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 4rem 2rem;
+        }
+
+        .blog-layout {
+            display: grid;
+            grid-template-columns: 1fr 320px;
+            gap: 3rem;
+            align-items: start;
+        }
+
+        .post-tag {
+            display: inline-block;
+            background: #eee;
+            color: #555;
+            font-size: 0.8rem;
+            padding: 0.2rem 0.6rem;
+            border-radius: 4px;
+            margin-bottom: 1rem;
+        }
+
+        .post-meta {
+            font-size: 0.85rem;
+            color: #888;
+            margin-bottom: 2rem;
+            padding-bottom: 2rem;
+            border-bottom: 0.5px solid #ddd;
+        }
+
+        .post-body h2 {
+            font-size: 1.3rem;
+            margin: 2rem 0 0.75rem;
+        }
+
+        .post-body p {
+            font-size: 1rem;
+            color: #333;
+            margin-bottom: 1.2rem;
+        }
+
+        .post-body code {
+            background: #ebebeb;
+            font-family: monospace;
+            font-size: 0.9rem;
+            padding: 2px 6px;
+            border-radius: 3px;
+        }
+
+        .code-block {
+            background: #1a1a1a;
+            color: #e8e8e8;
+            font-family: monospace;
+            font-size: 0.88rem;
+            padding: 1.2rem 1.4rem;
+            border-radius: 6px;
+            margin: 1.2rem 0;
+            overflow-x: auto;
+            line-height: 1.6;
+        }
+
+        .sidebar {
+            position: sticky;   /* sidebar sticks while main content scrolls */
+            top: 88px;
+        }
+
+        /* Sidebar widget */
+        .widget {
+            background: #fff;
+            border: 0.5px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 1.4rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .widget-title {
+            font-size: 0.78rem;
+            font-weight: 500;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: #888;
+            margin-bottom: 1rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 0.5px solid #eee;
+        }
+
+        /* About widget */
+        .about-avatar {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            background: #EEEDFE;
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.4rem;
+        }
+
+        .about-name {
+            font-size: 1rem;
+            font-weight: bold;
+            margin-bottom: 0.3rem;
+        }
+
+        .about-bio {
+            font-size: 0.85rem;
+            color: #666;
+            line-height: 1.55;
+        }
+
+        /* Recent posts widget */
+        .recent-post {
+            display: flex;               /* Flexbox inside Grid — totally normal! */
+            gap: 0.75rem;
+            align-items: flex-start;
+            padding: 0.6rem 0;
+            border-bottom: 0.5px solid #f0f0f0;
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .recent-post:last-child { border-bottom: none; }
+
+        .recent-thumb {
+            width: 48px;
+            height: 48px;
+            border-radius: 4px;
+            flex-shrink: 0;              /* don't let thumbnail shrink */
+        }
+
+        .t1 { background: #E1F5EE; }
+        .t2 { background: #FAEEDA; }
+        .t3 { background: #FCE8E8; }
+
+        .recent-text {}
+
+        .recent-title {
+            font-size: 0.88rem;
+            font-weight: 500;
+            line-height: 1.35;
+            margin-bottom: 0.2rem;
+        }
+
+        .recent-date { font-size: 0.78rem; color: #aaa; }
+
+        /* Tags widget */
+        .tag-list {
+            display: flex;               /* Flexbox again — for the tag pills */
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .tag-pill {
+            font-size: 0.78rem;
+            padding: 4px 10px;
+            border-radius: 20px;
+            background: #f0f0f0;
+            color: #555;
+            text-decoration: none;
+            transition: background 0.15s;
+        }
+
+        .tag-pill:hover { background: #e0e0e0; }
+
+    </style>
+</head>
+<body>
+  <nav class="navbar">
+    <a href="#" class="logo">MyBrand</a>
+    <ul class="nav-links">
+      <li><a href="#">Home</a></li>
+      <li><a href="#">About</a></li>
+      <li><a href="#">Projects</a></li>
+      <li><a href="#">Contact</a></li>
+    </ul>
+  </nav>
+
+  <div class="page">
+    <div class="blog-layout">
+
+      <main class="main-content">
+        <span class="post-tag">CSS / Layout</span>
+        <h1 class="post-title">How CSS Grid changed the way I think about layouts</h1>
+        <p class="post-meta">May 9, 2026 &nbsp;·&nbsp; 4 min read &nbsp;·&nbsp; Day 5 of #csslayouts</p>
+
+        <div class="post-body">
+          <p>
+            Before Grid, building a two-column layout meant floats, clearfixes, and a lot of
+            frustration. Today I built the same layout in three lines of CSS and it actually
+            makes sense.
+          </p>
+
+          <h2>The three lines that do everything</h2>
+          <p>
+            The entire layout — wide content on the left, sidebar fixed on the right — comes
+            down to this:
+          </p>
+
+          <div class="code-block">.blog-layout {display: grid;grid-template-columns: 1fr 320px; gap: 3rem;}</div>
+
+          <p>
+            <code>1fr</code> means "take all the remaining space after the sidebar's 320px
+            is reserved." The browser does the math. You never touch a percentage or calculate
+            a width by hand.
+          </p>
+
+          <h2>Flexbox vs Grid — when to use which</h2>
+          <p>
+            After five days of exercises I have a simple rule: use Flexbox for components
+            (navbars, card rows, button groups), use Grid for page structure (the skeleton
+            that holds everything together).
+          </p>
+          <p>
+            Notice the sidebar's recent posts widget uses Flexbox to align the thumbnail and
+            text side by side. Grid for the outer layout, Flexbox for the inner component —
+            they work together perfectly.
+          </p>
+
+          <h2>The sticky sidebar trick</h2>
+          <p>
+            Adding <code>position: sticky; top: 88px</code> to the sidebar makes it stay
+            visible as you scroll through a long article. This only works because
+            <code>align-items: start</code> is set on the grid container — without it,
+            the sidebar stretches to match the full height of the content column and
+            sticky has nothing to stick inside.
+          </p>
+
+          <h2>What's next</h2>
+          <p>
+            Day 6 is combining everything — Grid for the full page skeleton, Flexbox for all
+            the components inside it. That's the pattern used in almost every real website.
+          </p>
+        </div>
+      </main>
+
+      <!-- COLUMN 2: Sidebar -->
+      <aside class="sidebar">
+
+        <!-- About widget -->
+        <div class="widget">
+          <p class="widget-title">About</p>
+          <div class="about-avatar">👤</div>
+          <p class="about-name">oNk2r</p>
+          <p class="about-bio">Beginner full-stack developer. Building one thing every day and committing it to GitHub.</p>
+        </div>
+
+        <div class="widget">
+          <p class="widget-title">Recent Posts</p>
+          <a href="../Day-04/gallery.html" class="recent-post">
+            <div class="recent-thumb t1"></div>
+            <div class="recent-text">
+              <p class="recent-title">Day 4 — CSS Grid Photo Gallery</p>
+              <p class="recent-date">May 8, 2026</p>
+            </div>
+          </a>
+          <a href="../Day-03/cards.html" class="recent-post">
+            <div class="recent-thumb t2"></div>
+            <div class="recent-text">
+              <p class="recent-title">Day 3 — Flex Wrap Card Row</p>
+              <p class="recent-date">May 7, 2026</p>
+            </div>
+          </a>
+          <a href="../Day-02/hero.html" class="recent-post">
+            <div class="recent-thumb t3"></div>
+            <div class="recent-text">
+              <p class="recent-title">Day 2 — Flexbox Hero Section</p>
+              <p class="recent-date">May 6, 2026</p>
+            </div>
+          </a>
+        </div>
+
+        <!-- Tags widget -->
+        <div class="widget">
+          <p class="widget-title">Tags</p>
+          <div class="tag-list">
+            <a href="#" class="tag-pill">CSS</a>
+            <a href="#" class="tag-pill">Flexbox</a>
+            <a href="#" class="tag-pill">Grid</a>
+            <a href="#" class="tag-pill">HTML</a>
+            <a href="#" class="tag-pill">Beginner</a>
+            <a href="#" class="tag-pill">#7DaysOfCSSLayouts</a>
+          </div>
+        </div>
+
+      </aside>
+
+    </div>
+  </div>
+</body>
+</html>
