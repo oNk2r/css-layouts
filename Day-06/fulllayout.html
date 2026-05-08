@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Day 6 – Full Page Layout</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #f5f4f0;
+      color: #1a1a1a;
+      display: grid;
+      grid-template-columns: 1fr 300px;
+      grid-template-rows: 64px 1fr auto;
+      grid-template-areas:
+        "header header"
+        "main sidebar"
+        "footer footer";
+    }
+ 
+    .site-header  { grid-area: header; }
+    .site-main    { grid-area: main; }
+    .site-sidebar { grid-area: sidebar; }
+    .site-footer  { grid-area: footer; }
+ 
+    .site-header {
+      background: #1a1a1a;
+      padding: 0 2rem;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+ 
+    .logo {
+      font-size: 1.15rem;
+      font-weight: bold;
+      color: #f5f4f0;
+      text-decoration: none;
+      letter-spacing: 0.05em;
+    }
+ 
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+      list-style: none;
+    }
+ 
+    .nav-links a {
+      color: #aaa;
+      text-decoration: none;
+      font-size: 0.88rem;
+      letter-spacing: 0.04em;
+      transition: color 0.2s;
+    }
+ 
+    .nav-links a:hover { color: #f5f4f0; }
+ 
+    .site-main {
+      padding: 3rem 2.5rem;
+      border-right: 0.5px solid #e0e0e0;
+    }
+ 
+    .hero {
+      margin-bottom: 3.5rem;
+      padding-bottom: 3rem;
+      border-bottom: 0.5px solid #e0e0e0;
+    }
+ 
+    .hero-tag {
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #888;
+      display: block;
+      margin-bottom: 0.75rem;
+    }
+ 
+    .hero h1 {
+      font-size: 2.6rem;
+      line-height: 1.15;
+      max-width: 540px;
+      margin-bottom: 1rem;
+    }
+ 
+    .hero p {
+      font-size: 1.05rem;
+      color: #555;
+      max-width: 480px;
+      margin-bottom: 1.75rem;
+    }
+ 
+    .btn-group {
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+    }
+ 
+    .btn {
+      display: inline-block;
+      padding: 0.75rem 1.6rem;
+      font-size: 0.9rem;
+      border-radius: 4px;
+      text-decoration: none;
+      letter-spacing: 0.04em;
+      transition: all 0.2s;
+      cursor: pointer;
+      border: none;
+      font-family: inherit;
+    }
+ 
+    .btn-primary { background: #1a1a1a; color: #f5f4f0; }
+    .btn-primary:hover { background: #333; }
+    .btn-ghost { background: transparent; color: #1a1a1a; border: 0.5px solid #ccc; }
+    .btn-ghost:hover { border-color: #999; }
+ 
+    .section-title {
+      font-size: 0.78rem;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #888;
+      margin-bottom: 1.5rem;
+    }
+ 
+    .post-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+ 
+    .post-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 1rem;
+      padding: 1rem 0;
+      border-bottom: 0.5px solid #e8e8e8;
+      text-decoration: none;
+      color: inherit;
+      transition: color 0.15s;
+    }
+ 
+    .post-item:hover .post-item-title { color: #555; }
+ 
+    .post-item-title {
+      font-size: 1rem;
+      font-weight: 500;
+      transition: color 0.15s;
+    }
+ 
+    .post-item-meta {
+      font-size: 0.8rem;
+      color: #aaa;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+ 
+    .site-sidebar {
+      padding: 3rem 1.75rem;
+      background: #fafafa;
+      position: sticky;
+      top: 64px;
+      height: calc(100vh - 64px);
+      overflow-y: auto;
+    }
+ 
+    .widget {
+      margin-bottom: 2.5rem;
+    }
+ 
+    .widget-title {
+      font-size: 0.75rem;
+      font-weight: 500;
+      letter-spacing: 0.09em;
+      text-transform: uppercase;
+      color: #888;
+      margin-bottom: 1rem;
+      padding-bottom: 0.75rem;
+      border-bottom: 0.5px solid #e8e8e8;
+    }
+ 
+    .about-avatar {
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      background: #EEEDFE;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.3rem;
+      margin-bottom: 0.75rem;
+    }
+ 
+    .about-name {
+      font-size: 0.95rem;
+      font-weight: bold;
+      margin-bottom: 0.3rem;
+    }
+ 
+    .about-bio {
+      font-size: 0.83rem;
+      color: #666;
+      line-height: 1.55;
+    }
+ 
+    .stats-row {
+      display: flex;
+      gap: 0;
+    }
+ 
+    .stat {
+      flex: 1;
+      text-align: center;
+      padding: 0.75rem 0;
+      border-right: 0.5px solid #e8e8e8;
+    }
+ 
+    .stat:last-child { border-right: none; }
+ 
+    .stat-num {
+      font-size: 1.4rem;
+      font-weight: bold;
+      display: block;
+    }
+ 
+    .stat-label {
+      font-size: 0.72rem;
+      color: #aaa;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+ 
+    .tag-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+ 
+    .tag-pill {
+      font-size: 0.76rem;
+      padding: 3px 10px;
+      border-radius: 20px;
+      background: #eeeeee;
+      color: #555;
+      text-decoration: none;
+      transition: background 0.15s;
+    }
+ 
+    .tag-pill:hover { background: #e0e0e0; }
+ 
+    .site-footer {
+      background: #1a1a1a;
+      color: #888;
+      padding: 2rem 2.5rem;
+      font-size: 0.85rem;
+ 
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+ 
+    .footer-links {
+      display: flex;
+      gap: 1.5rem;
+      list-style: none;
+    }
+ 
+    .footer-links a {
+      color: #666;
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+ 
+    .footer-links a:hover { color: #f5f4f0; }
+ 
+ 
+    @media (max-width: 768px) {
+      body {
+        grid-template-columns: 1fr;
+        grid-template-rows: 64px auto auto auto;
+        grid-template-areas:
+          "header"
+          "main"
+          "sidebar"
+          "footer";
+      }
+ 
+      .site-sidebar {
+        position: static;
+        height: auto;
+        border-top: 0.5px solid #e0e0e0;
+      }
+    }
+
+  </style>
+</head>
+<body>
+
+  <header class="site-header">
+    <a href="../Day-06/fulllayout.html" class="logo">MyCSS</a>
+    <ul class="nav-links">
+      <li><a href="../Day-01/navbar.html">Home</a></li>
+      <li><a href="../Day-05/blog.html">Blog</a></li>
+      <li><a href="../Day-04/gallery.html">Projects</a></li>
+      <li><a href="mailto:hello@onk2r.dev">Contact</a></li>
+    </ul>
+  </header>
+
+  <main class="site-main">
+
+    <section class="hero">
+      <span class="hero-tag">Day 6 of #7DaysOfCSS</span>
+      <h1>Building things, every single day.</h1>
+      <p>A beginner full-stack developer learning CSS Grid.</p>
+      <div class="btn-group">
+        <a href="../Day-04/gallery.html" class="btn btn-primary">See my projects</a>
+        <a href="../Day-05/blog.html" class="btn btn-ghost">Read the blog</a>
+      </div>
+    </section>
+
+    <section>
+      <p class="section-title">Latest posts</p>
+      <div class="post-list">
+        <a href="../Day-05/blog.html" class="post-item">
+          <span class="post-item-title">Day 5 — Blog layout with CSS Grid sidebar</span>
+          <span class="post-item-meta">May 9 · CSS</span>
+        </a>
+        <a href="../Day-04/gallery.html" class="post-item">
+          <span class="post-item-title">Day 4 — Photo gallery with CSS Grid</span>
+          <span class="post-item-meta">May 8 · CSS</span>
+        </a>
+        <a href="../Day-03/cards.html" class="post-item">
+          <span class="post-item-title">Day 3 — Card row with flex-wrap</span>
+          <span class="post-item-meta">May 7 · CSS</span>
+        </a>
+        <a href="../Day-02/hero.html" class="post-item">
+          <span class="post-item-title">Day 2 — Centering a hero with Flexbox</span>
+          <span class="post-item-meta">May 6 · CSS</span>
+        </a>
+        <a href="../Day-01/navbar.html" class="post-item">
+          <span class="post-item-title">Day 1 — Flexbox navbar from scratch</span>
+          <span class="post-item-meta">May 5 · CSS</span>
+        </a>
+      </div>
+    </section>
+
+  </main>
+
+  <aside class="site-sidebar">
+
+    <div class="widget">
+      <p class="widget-title">About</p>
+      <div class="about-avatar">👤</div>
+      <p class="about-name">oNk2r</p>
+      <p class="about-bio">Beginner full-stack developer. One commit every day. Building toward my first job.</p>
+    </div>
+
+    <div class="widget">
+      <p class="widget-title">Streak</p>
+      <div class="stats-row">
+        <div class="stat">
+          <span class="stat-num">6</span>
+          <span class="stat-label">Days</span>
+        </div>
+        <div class="stat">
+          <span class="stat-num">8</span>
+          <span class="stat-label">Commits</span>
+        </div>
+        <div class="stat">
+          <span class="stat-num">6</span>
+          <span class="stat-label">Files</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="widget">
+      <p class="widget-title">Topics</p>
+      <div class="tag-list">
+        <a href="../Day-05/blog.html" class="tag-pill">CSS</a>
+        <a href="../Day-05/blog.html" class="tag-pill">Flexbox</a>
+        <a href="../Day-05/blog.html" class="tag-pill">Grid</a>
+        <a href="../Day-05/blog.html" class="tag-pill">HTML</a>
+        <a href="../Day-05/blog.html" class="tag-pill">JavaScript</a>
+        <a href="../Day-05/blog.html" class="tag-pill">React</a>
+        <a href="../Day-05/blog.html" class="tag-pill">#7DaysOfCSS</a>
+      </div>
+    </div>
+
+  </aside>
+
+  <footer class="site-footer">
+    <span>© 2026 MyCSS. Built with HTML & CSS.</span>
+    <ul class="footer-links">
+      <li><a href="https://github.com/">GitHub</a></li>
+      <li><a href="https://twitter.com/">Twitter</a></li>
+      <li><a href="https://linkedin.com/">LinkedIn</a></li>
+    </ul>
+  </footer>
+
+</body>
+</html>
